@@ -1,0 +1,21 @@
+name: mailjet_sender
+version: 0.1.0
+description: |
+  Mailjet sender is a standalone dart library to send emails
+    to.
+homepage: https://github.com/jayjah/mailjet_sender
+repository: https://github.com/jayjah/mailjet_sender.git
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+  
+dependencies:
+  # http queries
+  # BSD-License
+  # https://pub.dev/packages/http
+  http: ^0.12.2
+dev_dependencies:
+  test: ^1.0.0
+  # analyzer rules
+  pedantic: ^1.9.2
+
