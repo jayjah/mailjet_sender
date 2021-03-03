@@ -10,9 +10,7 @@ import 'package:http/http.dart' as http;
 ///   otherwise it throws a [EmailError]
 class EmailService extends Service {
   EmailService._internal();
-  factory EmailService.instance() {
-    return _currentInstance;
-  }
+  factory EmailService.instance() => _currentInstance;
   static const String _path = 'https://api.mailjet.com/v3.1/send';
   static final http.Client _client = http.Client();
   static final EmailService _currentInstance = EmailService._internal();
