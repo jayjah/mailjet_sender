@@ -57,14 +57,14 @@ class EmailService extends Service {
     return _handleResultOfMailService(response);
   }
 
-  Future<bool> sendErrorReportEmail(
-      String errorName, String errorMessage) async {
+  Future<bool> sendErrorReportEmail(String errorName, String errorMessage,
+      {String mailToReportTo}) async {
     _checkForCorrectSetUp();
 
     final response = await _client?.post(
       _path,
       headers: _headers,
-      body: _encodeBody(_fromErrorMail, _tag, _fromMail, '',
+      body: _encodeBody(_fromErrorMail, _tag, mailToReportTo ?? _fromMail, '',
           'Project dart_backend Error: $errorName',
           textPart: errorMessage ?? 'no error message transmitted',
           htmlPart: '',
