@@ -5,8 +5,7 @@ void main() async {
   EmailService emailService;
 
   setUp(() {
-    EmailService.instance().setUp('', '', '', '');
-    emailService = EmailService.instance();
+    emailService = EmailService.instance()..setUp('', '', '', '');
   });
 
   tearDown(() {

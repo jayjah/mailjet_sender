@@ -12,14 +12,14 @@ class EmailService extends Service {
   EmailService._internal();
   factory EmailService.instance() => _currentInstance;
   static const String _path = 'https://api.mailjet.com/v3.1/send';
-  static final http.Client _client = http.Client();
   static final EmailService _currentInstance = EmailService._internal();
   static String _tag;
 
   void setUp(String mailjetPriv, String mailjetPub, String fromMail,
       String fromErrorMail,
       {String tag = 'Email_Service'}) {
-    _initialized = false;
+    _client = http.Client();
+    _initialized = true;
     _tag = tag;
     _mailjetPrivate = mailjetPriv;
     _mailjetPublic = mailjetPub;
@@ -32,6 +32,7 @@ class EmailService extends Service {
   String _mailjetPublic;
   String _fromMail;
   String _fromErrorMail;
+  http.Client _client;
   String get _emailToken =>
       base64Encode(utf8.encode('$_mailjetPrivate:$_mailjetPublic'));
 
