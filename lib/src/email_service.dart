@@ -16,20 +16,24 @@ class EmailService extends Service {
   static final EmailService _currentInstance = EmailService._internal();
   static String _tag;
 
-  void setUp(
-      String mailjetPriv, String mailjetPub, String email, String emailOnError,
+  void setUp(String mailjetPriv, String mailjetPub, String fromMail,
+      String fromErrorMail,
       {String tag = 'Email_Service'}) {
     _initialized = false;
     _tag = tag;
+    _mailjetPrivate = mailjetPriv;
+    _mailjetPublic = mailjetPub;
+    _fromErrorMail = fromErrorMail;
+    _fromMail = fromMail;
   }
 
   bool _initialized = false;
-  String mailjetPrivate;
-  String mailjetPublic;
-  String emailAddress;
-  String emailErrorAddress;
+  String _mailjetPrivate;
+  String _mailjetPublic;
+  String _fromMail;
+  String _fromErrorMail;
   String get _emailToken =>
-      base64Encode(utf8.encode('$mailjetPrivate:$mailjetPublic'));
+      base64Encode(utf8.encode('$_mailjetPrivate:$_mailjetPublic'));
 
   Map<String, String> get _headers => <String, String>{
         'Content-Type': 'application/json',
@@ -43,7 +47,7 @@ class EmailService extends Service {
     final response = await _client?.post(
       _path,
       headers: _headers,
-      body: _encodeBody(emailAddress, _tag, email, name ?? '', subject,
+      body: _encodeBody(_fromMail, _tag, email, name ?? '', subject,
           textPart: content ?? '', htmlPart: htmlContent ?? ''),
     );
     logMessage(
@@ -59,7 +63,7 @@ class EmailService extends Service {
     final response = await _client?.post(
       _path,
       headers: _headers,
-      body: _encodeBody(emailErrorAddress, _tag, emailAddress, '',
+      body: _encodeBody(_fromErrorMail, _tag, _fromMail, '',
           'Project dart_backend Error: $errorName',
           textPart: errorMessage ?? 'no error message transmitted',
           htmlPart: '',
