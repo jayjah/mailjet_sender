@@ -46,7 +46,7 @@ class EmailService extends Service {
     _checkForCorrectSetUp();
 
     final response = await _client?.post(
-      _path,
+      Uri.parse(_path),
       headers: _headers,
       body: _encodeBody(_fromMail, _tag, email, name ?? '', subject,
           textPart: content ?? '', htmlPart: htmlContent ?? ''),
@@ -62,7 +62,7 @@ class EmailService extends Service {
     _checkForCorrectSetUp();
 
     final response = await _client?.post(
-      _path,
+      Uri.parse(_path),
       headers: _headers,
       body: _encodeBody(_fromErrorMail, _tag, mailToReportTo ?? _fromMail, '',
           'Project dart_backend Error: $errorName',
