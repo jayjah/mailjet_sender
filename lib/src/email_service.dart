@@ -13,7 +13,7 @@ class EmailService extends Service {
   factory EmailService.instance() => _currentInstance;
   static const String _path = 'https://api.mailjet.com/v3.1/send';
   static final EmailService _currentInstance = EmailService._internal();
-  static String _tag;
+  static late String _tag;
 
   void setUp(String mailjetPriv, String mailjetPub, String fromMail,
       String fromErrorMail,
@@ -28,11 +28,11 @@ class EmailService extends Service {
   }
 
   bool _initialized = false;
-  String _mailjetPrivate;
-  String _mailjetPublic;
-  String _fromMail;
-  String _fromErrorMail;
-  http.Client _client;
+  String? _mailjetPrivate;
+  String? _mailjetPublic;
+  String? _fromMail;
+  String? _fromErrorMail;
+  http.Client? _client;
   String get _emailToken =>
       base64Encode(utf8.encode('$_mailjetPrivate:$_mailjetPublic'));
 
@@ -42,13 +42,13 @@ class EmailService extends Service {
       };
 
   Future<bool> sendEmail(String email, String subject,
-      {String content, String htmlContent, String name}) async {
+      {String? content, String? htmlContent, String? name}) async {
     _checkForCorrectSetUp();
 
     final response = await _client?.post(
       Uri.parse(_path),
       headers: _headers,
-      body: _encodeBody(_fromMail, _tag, email, name ?? '', subject,
+      body: _encodeBody(_fromMail!, _tag, email, name ?? '', subject,
           textPart: content ?? '', htmlPart: htmlContent ?? ''),
     );
     logMessage(
@@ -58,17 +58,15 @@ class EmailService extends Service {
   }
 
   Future<bool> sendErrorReportEmail(String errorName, String errorMessage,
-      {String mailToReportTo}) async {
+      {String? mailToReportTo}) async {
     _checkForCorrectSetUp();
 
     final response = await _client?.post(
       Uri.parse(_path),
       headers: _headers,
-      body: _encodeBody(_fromErrorMail, _tag, mailToReportTo ?? _fromMail, '',
+      body: _encodeBody(_fromErrorMail!, _tag, mailToReportTo ?? _fromMail!, '',
           'Project dart_backend Error: $errorName',
-          textPart: errorMessage ?? 'no error message transmitted',
-          htmlPart: '',
-          customId: 'ErrorReport'),
+          textPart: errorMessage, htmlPart: '', customId: 'ErrorReport'),
     );
     logMessage('EmailService', 'sendErrorReportEmail',
         'mailjet response: ${response?.body}');
@@ -85,7 +83,7 @@ class EmailService extends Service {
     }
   }
 
-  bool _handleResultOfMailService(http.Response response) {
+  bool _handleResultOfMailService(http.Response? response) {
     if (response == null) {
       return false;
     }

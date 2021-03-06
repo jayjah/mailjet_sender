@@ -2,7 +2,7 @@ import 'package:mailjet_sender/mailjet_sender.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  EmailService emailService;
+  late EmailService emailService;
 
   setUp(() {
     emailService = EmailService.instance()..setUp('', '', '', '');
